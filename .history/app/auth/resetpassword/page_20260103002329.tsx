@@ -4,11 +4,11 @@ import Button from "@/app/components/Button";
 import InputBox from "@/app/components/InputBox";
 import Logoheader from "@/app/components/Logoheader";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdLock } from "react-icons/md";
 import { resetSuperAdminPassword } from "@/app/api/api";
 
-export default function ResetPasswordClient() {
+const page = () => {
   const router = useRouter();
   const params = useSearchParams();
   const token = params.get("token");
@@ -23,27 +23,20 @@ export default function ResetPasswordClient() {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
+  /* ---------------------- RESET PASSWORD ---------------------- */
   const handleReset = async () => {
     const { password, confirmPassword } = form;
-
-    if (!token) {
-      alert("❌ Invalid or expired reset link");
-      return;
-    }
 
     if (!password || !confirmPassword) {
       alert("❌ All fields are required");
       return;
     }
-
     if (password !== confirmPassword) {
       alert("❌ Passwords do not match");
       return;
     }
-
     const strongPasswordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#&*.])[A-Za-z\d@#&*.]{6,}$/;
-
     if (!strongPasswordRegex.test(password)) {
       alert(
         "❌ Weak Password\n\nPassword must:\n" +
@@ -57,14 +50,14 @@ export default function ResetPasswordClient() {
 
     try {
       setLoading(true);
-      const res = await resetSuperAdminPassword(token, password);
+      const res = await resetSuperAdminPassword(token!, password);
       if (res.success) {
         alert("✅ " + res.message);
         router.replace("/auth/login");
       } else {
         alert("❌ " + (res.message || "Unable to reset password"));
       }
-    } catch {
+    } catch (error: any) {
       alert("❌ Something went wrong");
     } finally {
       setLoading(false);
@@ -75,7 +68,7 @@ export default function ResetPasswordClient() {
     <div className="flex justify-center items-center w-full h-screen bg-(--color-sidebar)">
       <div className="bg-(--color-bg) flex flex-col items-center justify-center rounded-2xl shadow-md sm:w-[70%] md:w-[50%] lg:w-[30%]">
         <form
-          className="flex flex-col w-full h-full p-10 gap-8 items-center"
+          className="flex flex-col w-full h-full p-10 gap-8 md:gap-15 items-center"
           onSubmit={(e) => e.preventDefault()}
         >
           <Logoheader title="Reset Password" />
@@ -89,6 +82,7 @@ export default function ResetPasswordClient() {
               onChange={(v) => handleChange("password", v)}
               required
             />
+
             <InputBox
               icon={<MdLock size={26} />}
               type="password"
@@ -99,13 +93,17 @@ export default function ResetPasswordClient() {
             />
           </div>
 
-          <Button
-            title={loading ? "Please wait..." : "Reset Password"}
-            onClick={handleReset}
-            disabled={loading}
-          />
+          <div className="flex flex-col w-full gap-3 md:gap-5 mt-auto">
+            <Button
+              title={loading ? "Please wait..." : "Reset Password"}
+              onClick={handleReset}
+              disabled={loading}
+            />
+          </div>
         </form>
       </div>
     </div>
   );
-}
+};
+
+export default page;
