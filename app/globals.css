@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+:root {
+  --color-primary: #8d6bdc;
+  --color-secondary: #e0d4ff;
+  --color-bg: #efefef;
+  --color-sidebar: #ffffff;
+  --color-gray: #5d5d5d;
+}
+
+select option:checked {
+  background-color: var(--color-secondary);
+  color: var(--color-gray);
+}
+
+body {
+  background-color: var(--color-bg);
+}
+
+/* 🔥 REMOVE BROWSER DEFAULT PASSWORD EYE ICON */
+
+/* Chrome, Edge, Safari */
+input[type="password"]::-webkit-credentials-auto-fill-button,
+input[type="password"]::-webkit-textfield-decoration-container {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/* Microsoft Edge (old & new) */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none !important;
+}
+
+/* Firefox */
+input[type="password"] {
+  appearance: none;
+}
+
+/* 🔔 Search icon shake animation */
+/* Base icon style */
+.search-icon {
+  color: var(--color-gray);
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+/* Shake animation */
+@keyframes search-shake {
+  0% {
+    transform: rotate(0deg) scale(1.2);
+  }
+  25% {
+    transform: rotate(24deg) scale(1.2);
+  }
+  50% {
+    transform: rotate(-24deg) scale(1.2);
+  }
+  75% {
+    transform: rotate(8deg) scale(1.2);
+  }
+  100% {
+    transform: rotate(0deg) scale(1.2);
+  }
+}
+
+/* Focus effect */
+.group:focus-within .search-icon {
+  animation: search-shake 0.35s ease-in-out;
+  color: var(--color-primary);
+}
+
+/* ❌ Delete confirmation shake */
+@keyframes delete-shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-6px);
+  }
+  40% {
+    transform: translateX(6px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(4px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.delete-shake {
+  animation: delete-shake 0.35s ease-in-out;
+}
