@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "OnDuty | Super Admin",
-  description: "Internal super admin dashboard for managing application users",
+  title: "OnDuty Super-Admin",
+  description: "Internal system for super admin operations",
 };
 
 export default function RootLayout({
